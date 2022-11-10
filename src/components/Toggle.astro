@@ -1,0 +1,23 @@
+---
+---
+
+<section class="section">
+  <button type="button">
+    Cache/Afficher
+  </button>
+  
+  <p>
+    Je suis un text
+  </p>
+</section>
+
+<script>
+  const b = document.querySelector('button');
+  b.addEventListener('click', () => {
+    if (b.nextElementSibling.style.display === '') {
+      b.nextElementSibling.style.display = 'none';
+    } else {
+      b.nextElementSibling.style.display = '';
+    }
+  });
+</script>

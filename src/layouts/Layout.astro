@@ -1,0 +1,25 @@
+---
+export interface Props {
+	title: string;
+	description: string;
+	ogImage: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		{ description && <meta name="description" content={ description }> }
+		{ ogImage && <meta name="og:image" content={ ogImage }> }
+		<title>{title}</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

@@ -1,0 +1,53 @@
+---
+import constants from "@/constants";
+import Layout from "@layouts/Layout.astro";
+import AnimeContent from "@components/AnimeContent.vue";
+
+// on génère les urls
+export async function getStaticPaths() {
+  return await fetch(`${constants.URL}/items/Trailers?fields=id`)
+      .then(res => res.json())
+      .then(json => json.data.map((anime) => {
+        return {
+          params: {
+            id: anime.id.toString()
+          }
+        };
+      }));
+}
+
+// on récupère l'id de la page en train d'être générée
+const { id } = Astro.params;
+
+// on récupère les datas
+const avgComments = await fetch(`${constants.URL}/items/Comments?filter[trailer][_eq]=${id}&aggregate[avg]=rate`)
+    .then((res) => res.json())
+    .then((json) => json.data[0].avg.rate || 0);
+
+  const nbVisits = await fetch(`${constants.URL}/items/Visits?filter[trailer][_eq]=${id}&aggregate[count]=*`)
+    .then((res) => res.json())
+    .then((json) => json.data[0].count);
+
+  const anime = await fetch(`${constants.URL}/items/Trailers/${id}`)
+    .then(res => res.json())
+    .then((json) => json.data);
+
+const meta = {
+  title: `Anime : ${anime.title}`,
+  ogImage: null,
+};
+
+if (anime.image) {
+  meta.ogImage = `${constants.URL}/assets/${anime.image}`;
+}
+---
+
+<!-- comme en react, on peut spread des props -->
+<Layout { ...meta }>
+  <AnimeContent
+    client:load
+    avgComments={ avgComments }
+    nbVisits={ nbVisits }
+    anime={ anime }
+  />
+</Layout>

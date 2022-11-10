@@ -1,0 +1,17 @@
+---
+import constants from '@/constants';
+import Layout from '@layouts/Layout.astro';
+import HomeContent from '@components/HomeContent.vue';
+// import Toggle from '@components/Toggle.astro';
+
+const data = await fetch(`${constants.URL}/items/Trailers?meta=total_count&page=1&limit=12`)
+	.then(res => res.json());
+---
+
+<Layout title="Ma super page">
+	<!-- <Toggle /> -->
+	<HomeContent
+		meta={ data.meta }
+		animes={ data.data }
+	/>
+</Layout>
